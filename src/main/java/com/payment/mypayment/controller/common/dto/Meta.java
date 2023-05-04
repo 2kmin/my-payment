@@ -13,27 +13,40 @@ public class Meta {
 
     private String code;
 
+    private String pgFailCode;
+
     private String message;
 
     private String detailMessage;
 
     public static Meta ofSuccess() {
-        return Meta.ofFail(ResponseType.SUCCESS);
+        return Meta.setMeta(ResponseType.SUCCESS);
     }
 
     public static Meta ofWrongParameterFail(String detailMessage){
-        Meta meta = ofFail(ResponseType.WRONG_PARAMETER);
+        Meta meta = setMeta(ResponseType.WRONG_PARAMETER);
         meta.setDetailMessage(detailMessage);
         return meta;
     }
 
-    public static Meta ofPgFail(String pgFailMessage){
-        Meta meta = ofFail(ResponseType.PG_FAIL);
-        meta.setDetailMessage("[PG Message] "+pgFailMessage);
+    public static Meta ofPgFail(String pgCode, String pgMessage){
+        Meta meta = setMeta(ResponseType.PG_FAIL);
+        meta.setPgFailCode(pgCode);
+        meta.setDetailMessage(pgMessage);
         return meta;
     }
 
     public static Meta ofFail(ResponseType responseType){
+        return Meta.setMeta(responseType);
+    }
+
+    public static Meta ofFail(ResponseType responseType, String detailMessage){
+        Meta meta = Meta.setMeta(responseType);
+        meta.setDetailMessage(detailMessage);
+        return meta;
+    }
+
+    private static Meta setMeta(ResponseType responseType){
         return Meta.builder()
                 .code(responseType.getCode())
                 .message(responseType.getMessage())
