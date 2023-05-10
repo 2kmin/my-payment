@@ -1,22 +1,14 @@
 package com.payment.mypayment.controller.payment;
 
-import com.payment.mypayment.common.type.ResponseType;
-import com.payment.mypayment.common.util.ValidationUtil;
 import com.payment.mypayment.controller.payment.dto.create.CreateRequest;
 import com.payment.mypayment.controller.payment.dto.create.CreateResponse;
-import com.payment.mypayment.exception.ValidationException;
-import com.payment.mypayment.service.CreateService;
+import com.payment.mypayment.service.create.CreateService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Slf4j
 @RestController

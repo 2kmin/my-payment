@@ -18,17 +18,27 @@ public class ExceptionHandler {
     @org.springframework.web.bind.annotation.ExceptionHandler(ValidationException.class)
     @ResponseBody
     public Meta handleValidationException(ValidationException e, final HttpServletRequest request) {
-        log.error("[ExceptionHandler.handleValidationException] >>> " + e.getDetailMessage());
-        log.error("url : "+request.getRequestURI());
+        log.error("[ExceptionHandler.handleValidationException][URL : {}] ValidationException : {}"
+                ,request.getRequestURI() , e.getDetailMessage());
         return Meta.ofWrongParameterFail(e.getDetailMessage());
     }
 
     @org.springframework.web.bind.annotation.ExceptionHandler(HttpMessageNotReadableException.class)
     @ResponseBody
     public ResponseEntity<Meta> handleHttpMessageNotReadableException(HttpMessageNotReadableException e, final HttpServletRequest request) {
-        log.error("url: {}, message: {}", request.getRequestURI(), e.getMessage());
+        log.error("[ExceptionHandler.handleHttpMessageNotReadableException][URL : {}] HttpMessageNotReadableException : {}"
+                ,request.getRequestURI(), e.getMessage());
 
         Meta meta = Meta.ofWrongParameterFail(e.getMessage());
         return new ResponseEntity<>(meta, HttpStatus.BAD_REQUEST);
+    }
+
+    @ResponseStatus(HttpStatus.OK)
+    @org.springframework.web.bind.annotation.ExceptionHandler(PgFailException.class)
+    @ResponseBody
+    public Meta handlePgFailException(PgFailException e) {
+        log.error("[ExceptionHandler.handlePgFailException][PG ID : {}] PgFailException : {} "
+                , e.getPgId(), e.getPgFailCode() + "/" + e.getPgFailMessage());
+        return Meta.ofPgFail(e.getPgFailCode(), e.getPgFailMessage());
     }
 }

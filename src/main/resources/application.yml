@@ -1,0 +1,20 @@
+logging.level.com.guide.openfeign.infra: DEBUG
+feign:
+  client:
+    config:
+      default:
+        connectTimeout: 5000
+        readTimeout: 5000
+        loggerLevel: FULL
+
+external-api:
+  http-bin: http://localhost:8080
+logging:
+  level:
+    root: info
+    ads.client: debug # open feign package ??? ?? ??.
+    com.payment.mypayment: debug
+key:
+  kakao:
+    cid: TC0ONETIME
+    adminKey: 13bb6318f4847f6ca5e9db78c8adcaa5

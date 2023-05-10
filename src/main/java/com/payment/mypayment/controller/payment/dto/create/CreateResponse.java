@@ -19,6 +19,7 @@ public class CreateResponse {
     public static CreateResponse ofSuccess(CreateResponseBody body) {
         return CreateResponse.builder()
                 .meta(Meta.ofSuccess())
+                .body(body)
                 .build();
     }
 
@@ -30,13 +31,7 @@ public class CreateResponse {
 
     public static CreateResponse ofFail(ResponseType responseType, String detailMessage) {
         return CreateResponse.builder()
-                .meta(Meta.ofFail(responseType))
-                .build();
-    }
-
-    public static CreateResponse ofPgFail(String pgCode, String pgMessage) {
-        return CreateResponse.builder()
-                .meta(Meta.ofPgFail(pgCode, pgMessage))
+                .meta(Meta.ofFail(responseType, detailMessage))
                 .build();
     }
 }

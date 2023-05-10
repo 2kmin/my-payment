@@ -11,15 +11,11 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 @Slf4j
 public class ValidationException extends RuntimeException{
 
-    private ResponseType error;
-    private String detailMessage;
+    private final ResponseType responseType;
+    private final String detailMessage;
 
-    public ValidationException(String message){
-        super(message);
-    }
-
-    public ValidationException(ResponseType error, String detailMessage ) {
-        this.error = error;
+    public ValidationException(ResponseType responseType, String detailMessage ) {
+        this.responseType = responseType;
         this.detailMessage = detailMessage;
     }
 }

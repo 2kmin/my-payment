@@ -25,4 +25,13 @@ public class CreateRequest {
     @Valid
     @NotNull(message = "결제 상품 누락")
     private List<Product> productList;
+
+    @NotBlank(message = "approvalUrl 누락")
+    private String approvalUrl;
+
+    @NotBlank(message = "cancelUrl 누락")
+    private String cancelUrl;
+
+    @NotBlank(message = "failUrl 누락")
+    private String failUrl;
 }

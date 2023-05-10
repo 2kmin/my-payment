@@ -15,6 +15,15 @@ public class AmountUtil {
         AmountInfo amountInfo = new AmountInfo();
         List<AmountInfo.ProductTaxInfo> productTaxInfoList = new ArrayList<>();
 
+        int transactionAmount = 0,
+                totalCount = 0,
+                totalProductAmount = 0,
+                totalDiscountAmount = 0,
+                totalTaxAmount = 0,
+                totalTaxFreeAmount = 0,
+                totalTaxSupplyAmount = 0,
+                totalVatAmount = 0;
+
         for(Product product : productList) {
             Map<String, Integer> taxInfo = getTaxInfo(product.getAmount(), product.getTaxType());
 
@@ -31,13 +40,24 @@ public class AmountUtil {
                     .vatAmount(vatAmount)
                     .build();
 
-            amountInfo.setTransactionAmount(amountInfo.getTransactionAmount() + product.getAmount());
-            amountInfo.setTotalTaxAmount(amountInfo.getTotalTaxAmount() + taxAmount);
-            amountInfo.setTotalTaxFreeAmount(amountInfo.getTotalTaxFreeAmount() + taxFreeAmount);
-            amountInfo.setTotalTaxSupplyAmount(amountInfo.getTotalTaxSupplyAmount() + taxSupplyAmount);
-            amountInfo.setTotalVatAmount(amountInfo.getTotalVatAmount() + vatAmount);
+            transactionAmount += product.getAmount();
+            totalCount += product.getCount();
+            totalProductAmount += product.getAmount();
+            totalDiscountAmount += product.getDiscountAmount();
+            totalTaxAmount += taxAmount;
+            totalTaxFreeAmount += taxFreeAmount;
+            totalTaxSupplyAmount += taxSupplyAmount;
+            totalVatAmount += vatAmount;
             productTaxInfoList.add(productTaxInfo);
         }
+        amountInfo.setTransactionAmount(transactionAmount);
+        amountInfo.setTotalCount(totalCount);
+        amountInfo.setTotalProductAmount(totalProductAmount);
+        amountInfo.setTotalDiscountAmount(totalDiscountAmount);
+        amountInfo.setTotalTaxAmount(totalTaxAmount);
+        amountInfo.setTotalTaxFreeAmount(totalTaxFreeAmount);
+        amountInfo.setTotalTaxSupplyAmount(totalTaxSupplyAmount);
+        amountInfo.setTotalVatAmount(totalVatAmount);
         amountInfo.setProductTaxInfoList(productTaxInfoList);
 
         return amountInfo;
