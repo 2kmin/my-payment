@@ -5,8 +5,32 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.Builder;
 import lombok.Data;
 
+import java.time.LocalDateTime;
+
 @Data
 @Builder
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 public class CreateResponseBody {
+
+    private Long orderNo;
+
+    private String paymentId;
+
+    private String tid;
+
+    private String redirectPcUrl;
+
+    private String redirectAppUrl;
+
+    private String redirectMobileUrl;
+
+    private AppScheme appScheme;
+
+    @Data
+    @Builder
+    public static class AppScheme {
+        private String aos;
+        private String ios;
+    }
+
 }

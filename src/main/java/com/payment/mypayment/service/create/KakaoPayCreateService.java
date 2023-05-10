@@ -6,10 +6,14 @@ import com.payment.mypayment.client.KakaoPayClient;
 import com.payment.mypayment.client.dto.ClientResponse;
 import com.payment.mypayment.client.dto.KakaoPayCreateRequest;
 import com.payment.mypayment.client.dto.KakaoPayCreateResponse;
+import com.payment.mypayment.common.type.PgId;
 import com.payment.mypayment.common.type.ResponseType;
 import com.payment.mypayment.controller.common.dto.AmountInfo;
+import com.payment.mypayment.controller.common.dto.Meta;
 import com.payment.mypayment.controller.payment.dto.create.CreateRequest;
 import com.payment.mypayment.controller.payment.dto.create.CreateResponse;
+import com.payment.mypayment.controller.payment.dto.create.CreateResponseBody;
+import com.payment.mypayment.exception.PgFailException;
 import feign.FeignException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -33,11 +37,40 @@ public class KakaoPayCreateService {
 
     public CreateResponse create(String paymentId, CreateRequest createRequest, AmountInfo amountInfo) {
 
-        ClientResponse response = getPgResponse(createRequest, amountInfo);
-        log.info(">>> 카카오페이 결제 생성 결과 : " + response);
+        ClientResponse clientResponse = getPgResponse(createRequest, amountInfo);
 
+        log.info(">>> 카카오페이 결제 생성 결과 : " + clientResponse);
 
-        return null;
+        if(clientResponse.isSuccess()){
+
+            KakaoPayCreateResponse kakaoPayCreateResponse = (KakaoPayCreateResponse) clientResponse.getPgResponse();
+
+            CreateResponseBody body = CreateResponseBody.builder()
+                    .orderNo(createRequest.getOrderNo())
+                    .paymentId(paymentId)
+                    .tid(kakaoPayCreateResponse.getTid())
+                    .redirectPcUrl(kakaoPayCreateResponse.getNextRedirectPcUrl())
+                    .redirectAppUrl(kakaoPayCreateResponse.getNextRedirectAppUrl())
+                    .redirectMobileUrl(kakaoPayCreateResponse.getNextRedirectMobileUrl())
+                    .appScheme(CreateResponseBody.AppScheme.builder()
+                            .aos(kakaoPayCreateResponse.getAndroidAppScheme())
+                            .ios(kakaoPayCreateResponse.getIosAppScheme()).build())
+                    .build();
+
+            return CreateResponse.builder()
+                    .meta(Meta.ofSuccess())
+                    .body(body)
+                    .build();
+
+        }else {
+            if(ObjectUtils.isEmpty(clientResponse.getPgCode())){
+                return CreateResponse.builder()
+                        .meta(Meta.ofFail(ResponseType.COMMUNICATION_ERROR))
+                        .build();
+            }else {
+                throw new PgFailException(PgId.KAKAO_PAY.getPgId(), clientResponse.getPgCode(), clientResponse.getPgMessage());
+            }
+        }
     }
 
     public ClientResponse getPgResponse(CreateRequest createRequest, AmountInfo amountInfo) {
@@ -86,16 +119,12 @@ public class KakaoPayCreateService {
                 log.error("[KakaoPayCreateService.getPgResponse] JsonProcessingException - " + e);
                 clientResponse = ClientResponse.builder()
                         .isSuccess(false)
-                        .pgCode(ResponseType.PROCESSING_ERROR.getCode())
-                        .pgMessage(ResponseType.PROCESSING_ERROR.getMessage())
                         .build();
             }
         }catch (Exception e){
             log.error("[KakaoPayCreateService.getPgResponse] Exception - " + e);
             clientResponse = ClientResponse.builder()
                     .isSuccess(false)
-                    .pgCode(ResponseType.PROCESSING_ERROR.getCode())
-                    .pgMessage(ResponseType.PROCESSING_ERROR.getMessage())
                     .build();
         }
 
