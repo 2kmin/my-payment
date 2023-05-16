@@ -31,5 +31,5 @@ public class Product {
     private int discountAmount;
 
     @Positive(message = "상품 결제 금액은 0보다 커야합니다.")
-    private int amount;
+    private int transactionAmount;
 }

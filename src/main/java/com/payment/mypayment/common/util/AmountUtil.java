@@ -25,7 +25,7 @@ public class AmountUtil {
                 totalVatAmount = 0;
 
         for(Product product : productList) {
-            Map<String, Integer> taxInfo = getTaxInfo(product.getAmount(), product.getTaxType());
+            Map<String, Integer> taxInfo = getTaxInfo(product.getTransactionAmount(), product.getTaxType());
 
             int taxAmount = taxInfo.get("taxAmount");
             int taxFreeAmount = taxInfo.get("taxFreeAmount");
@@ -40,9 +40,9 @@ public class AmountUtil {
                     .vatAmount(vatAmount)
                     .build();
 
-            transactionAmount += product.getAmount();
+            transactionAmount += product.getTransactionAmount();
             totalCount += product.getCount();
-            totalProductAmount += product.getAmount();
+            totalProductAmount += product.getTransactionAmount();
             totalDiscountAmount += product.getDiscountAmount();
             totalTaxAmount += taxAmount;
             totalTaxFreeAmount += taxFreeAmount;

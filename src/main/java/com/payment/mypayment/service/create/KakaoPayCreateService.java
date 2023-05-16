@@ -57,30 +57,27 @@ public class KakaoPayCreateService {
                             .ios(kakaoPayCreateResponse.getIosAppScheme()).build())
                     .build();
 
-            return CreateResponse.builder()
-                    .meta(Meta.ofSuccess())
-                    .body(body)
-                    .build();
+            return CreateResponse.ofSuccess(body);
 
         }else {
             if(ObjectUtils.isEmpty(clientResponse.getPgCode())){
-                return CreateResponse.builder()
-                        .meta(Meta.ofFail(ResponseType.COMMUNICATION_ERROR))
-                        .build();
+                return CreateResponse.ofFail(ResponseType.COMMUNICATION_ERROR);
             }else {
-                throw new PgFailException(PgId.KAKAO_PAY.getPgId(), clientResponse.getPgCode(), clientResponse.getPgMessage());
+                throw new PgFailException(PgId.KAKAO_PAY.getPgId()
+                                            , clientResponse.getPgCode()
+                                            , clientResponse.getPgMessage());
             }
         }
     }
 
     public ClientResponse getPgResponse(CreateRequest createRequest, AmountInfo amountInfo) {
 
-        ClientResponse clientResponse = new ClientResponse();
-        ResponseEntity<String> pgResponse = null;
+        ClientResponse clientResponse;
+        ResponseEntity<String> pgResponse;
 
         KakaoPayCreateRequest kakaoPayCreateRequest = KakaoPayCreateRequest.builder()
                 .cid(CID)
-                .partnerOrderId(Long.toString(createRequest.getOrderNo()))
+                .partnerOrderId(createRequest.getOrderNo())
                 .partnerUserId(createRequest.getMemberNo())
                 .itemName(createRequest.getProductList().get(0).getProductName())
                 .quantity(amountInfo.getTotalCount())

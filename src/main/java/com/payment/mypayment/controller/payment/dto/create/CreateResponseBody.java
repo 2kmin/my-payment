@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 public class CreateResponseBody {
 
-    private Long orderNo;
+    private String orderNo;
 
     private String paymentId;
 

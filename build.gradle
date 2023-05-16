@@ -28,7 +28,8 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-validation'
     implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-openfeign', version: '4.0.2'
     implementation 'org.springframework.boot:spring-boot-configuration-processor'
-    implementation 'org.apache.httpcomponents:httpclient:4.3.4'
+    implementation 'org.apache.httpcomponents:httpclient:4.5.14'
+    implementation group: 'mysql', name: 'mysql-connector-java', version: '8.0.33'
 }
 
 //tasks.named('test') {

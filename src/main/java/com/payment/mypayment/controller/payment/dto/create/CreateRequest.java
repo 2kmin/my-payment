@@ -15,9 +15,8 @@ import java.util.List;
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 public class CreateRequest {
 
-    @NotNull(message = "주문번호 누락")
-    @Positive(message = "주문번호는 0보다 커야합니다.")
-    private long orderNo;
+    @NotBlank(message = "주문번호 누락")
+    private String orderNo;
 
     @NotBlank(message = "memberNo 누락")
     private String memberNo;

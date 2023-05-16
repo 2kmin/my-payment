@@ -1,3 +1,9 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://15.164.99.85:3306/paymentdb?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+    username: kangmin
+    password: dlrkdals963
 logging.level.com.guide.openfeign.infra: DEBUG
 feign:
   client:
