@@ -1,11 +1,11 @@
 package com.payment.mypayment.service.create;
 
+import com.payment.mypayment.common.type.TransactionType;
 import com.payment.mypayment.controller.common.dto.AmountInfo;
 import com.payment.mypayment.entity.PaymentRequest;
 import com.payment.mypayment.entity.Product;
 import com.payment.mypayment.repository.PaymentRequestRepository;
 import com.payment.mypayment.repository.ProductRepository;
-import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 
-@Slf4j
 @Service
 @AllArgsConstructor
 public class CreateTransactionService {
@@ -52,6 +51,7 @@ public class CreateTransactionService {
                     .productName(productTaxInfo.getProduct().getProductName())
                     .productCode(productTaxInfo.getProduct().getProductCode())
                     .taxType(productTaxInfo.getProduct().getTaxType())
+                    .transactionType(TransactionType.PAYMENT.name())
                     .productCount(productTaxInfo.getProduct().getCount())
                     .productAmount(productTaxInfo.getProduct().getProductAmount())
                     .discountAmount(productTaxInfo.getProduct().getDiscountAmount())

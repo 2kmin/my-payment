@@ -33,7 +33,7 @@ public class PaymentController {
         return createService.create(pgId, createRequest, bindingResult);
     }
 
-    @PostMapping("/apprve")
+    @PostMapping("/approve")
     public ApproveResponse approve(@NotBlank(message = "pgId 누락") @PathVariable(value = "pg_id") String pgId,
                                    @RequestBody @Valid ApproveRequest approveRequest,
                                    BindingResult bindingResult){

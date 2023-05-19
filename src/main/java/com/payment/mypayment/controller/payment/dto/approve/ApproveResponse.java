@@ -16,9 +16,23 @@ public class ApproveResponse {
 
     private ApproveResponseBody body;
 
+    public static ApproveResponse ofSuccess(ApproveResponseBody body) {
+        return ApproveResponse.builder()
+                .meta(Meta.ofSuccess())
+                .body(body)
+                .build();
+    }
+
     public static ApproveResponse ofFail(ResponseType responseType, String detailMessage) {
         return ApproveResponse.builder()
                 .meta(Meta.ofFail(responseType, detailMessage))
                 .build();
     }
+
+    public static ApproveResponse ofFail(ResponseType responseType) {
+        return ApproveResponse.builder()
+                .meta(Meta.ofFail(responseType))
+                .build();
+    }
+
 }

@@ -14,7 +14,7 @@ public class ValidationException extends RuntimeException{
     private final ResponseType responseType;
     private final String detailMessage;
 
-    public ValidationException(ResponseType responseType, String detailMessage ) {
+    public ValidationException(ResponseType responseType, String detailMessage) {
         this.responseType = responseType;
         this.detailMessage = detailMessage;
     }

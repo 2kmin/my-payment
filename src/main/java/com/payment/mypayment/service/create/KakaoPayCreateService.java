@@ -4,12 +4,11 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.payment.mypayment.client.KakaoPayClient;
 import com.payment.mypayment.client.dto.ClientResponse;
-import com.payment.mypayment.client.dto.KakaoPayCreateRequest;
-import com.payment.mypayment.client.dto.KakaoPayCreateResponse;
+import com.payment.mypayment.client.dto.kakaoPay.KakaoPayCreateRequest;
+import com.payment.mypayment.client.dto.kakaoPay.KakaoPayCreateResponse;
 import com.payment.mypayment.common.type.PgId;
 import com.payment.mypayment.common.type.ResponseType;
 import com.payment.mypayment.controller.common.dto.AmountInfo;
-import com.payment.mypayment.controller.common.dto.Meta;
 import com.payment.mypayment.controller.payment.dto.create.CreateRequest;
 import com.payment.mypayment.controller.payment.dto.create.CreateResponse;
 import com.payment.mypayment.controller.payment.dto.create.CreateResponseBody;
@@ -29,11 +28,11 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class KakaoPayCreateService {
 
-    private final KakaoPayClient kakaoPayClient;
-    private final ObjectMapper objectMapper;
-
     @Value("${key.kakao.cid}")
     private String CID;
+
+    private final KakaoPayClient kakaoPayClient;
+    private final ObjectMapper objectMapper;
 
     public CreateResponse create(String paymentId, CreateRequest createRequest, AmountInfo amountInfo) {
 
@@ -60,7 +59,7 @@ public class KakaoPayCreateService {
             return CreateResponse.ofSuccess(body);
 
         }else {
-            if(ObjectUtils.isEmpty(clientResponse.getPgCode())){
+            if(ObjectUtils.isEmpty(clientResponse.getPgCode())) {
                 return CreateResponse.ofFail(ResponseType.COMMUNICATION_ERROR);
             }else {
                 throw new PgFailException(PgId.KAKAO_PAY.getPgId()
@@ -75,7 +74,7 @@ public class KakaoPayCreateService {
         ClientResponse clientResponse;
         ResponseEntity<String> pgResponse;
 
-        KakaoPayCreateRequest kakaoPayCreateRequest = KakaoPayCreateRequest.builder()
+        KakaoPayCreateRequest pgRequest = KakaoPayCreateRequest.builder()
                 .cid(CID)
                 .partnerOrderId(createRequest.getOrderNo())
                 .partnerUserId(createRequest.getMemberNo())
@@ -90,7 +89,7 @@ public class KakaoPayCreateService {
                 .build();
 
         try{
-            pgResponse = kakaoPayClient.requestCreate(kakaoPayCreateRequest);
+            pgResponse = kakaoPayClient.requestCreate(pgRequest);
             KakaoPayCreateResponse kakaoPayCreateResponse = objectMapper.readValue(pgResponse.getBody(), KakaoPayCreateResponse.class);
 
             clientResponse = ClientResponse.builder()

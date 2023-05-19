@@ -3,12 +3,11 @@ package com.payment.mypayment.service.create;
 import com.payment.mypayment.common.type.ResponseType;
 import com.payment.mypayment.common.util.AmountUtil;
 import com.payment.mypayment.common.util.StringUtil;
-import com.payment.mypayment.common.util.ValidationUtil;
+import com.payment.mypayment.common.util.ValidationService;
 import com.payment.mypayment.controller.common.dto.AmountInfo;
 import com.payment.mypayment.controller.payment.dto.create.CreateRequest;
 import com.payment.mypayment.controller.payment.dto.create.CreateResponse;
 import com.payment.mypayment.exception.PgFailException;
-import com.payment.mypayment.repository.PaymentRequestRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -19,12 +18,13 @@ import org.springframework.validation.BindingResult;
 @RequiredArgsConstructor
 public class CreateService {
 
+    private final ValidationService validationService;
     private final CreateTransactionService createTransactionService;
     private final KakaoPayCreateService kakaoPayCreateService;
 
     public CreateResponse create(String pgId, CreateRequest request, BindingResult bindingResult) {
 
-        ValidationUtil.validateCreateRequest(request, bindingResult);
+        validationService.validateCreateRequest(request, bindingResult);
 
         String paymentId = StringUtil.getPaymentId();
         String orderNo = request.getOrderNo();

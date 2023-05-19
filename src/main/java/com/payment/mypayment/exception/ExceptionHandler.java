@@ -18,9 +18,9 @@ public class ExceptionHandler {
     @org.springframework.web.bind.annotation.ExceptionHandler(ValidationException.class)
     @ResponseBody
     public Meta handleValidationException(ValidationException e, final HttpServletRequest request) {
-        log.error("[ExceptionHandler.handleValidationException][URL : {}] ValidationException : {}"
-                ,request.getRequestURI() , e.getDetailMessage());
-        return Meta.ofWrongParameterFail(e.getDetailMessage());
+        log.error("[ExceptionHandler.handleValidationException][URL : {}] ValidationException : {} - {}"
+                ,request.getRequestURI(), e.getResponseType().toString(), e.getDetailMessage());
+        return Meta.ofFail(e.getResponseType(), e.getDetailMessage());
     }
 
     @org.springframework.web.bind.annotation.ExceptionHandler(HttpMessageNotReadableException.class)
