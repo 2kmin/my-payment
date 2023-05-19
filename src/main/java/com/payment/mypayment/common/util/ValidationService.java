@@ -52,13 +52,13 @@ public class ValidationService {
 
     private void validateAlreadyExistPaymentByPaymentId(String paymentId) {
         Optional<Payment> optPayment = paymentRepository.findByPaymentId(paymentId);
-        if(optPayment.isEmpty()) throw new ValidationException(ResponseType.ALREADY_SUCCESS
+        if(optPayment.isPresent()) throw new ValidationException(ResponseType.ALREADY_SUCCESS
                                                     ,"[paymentId : "+paymentId+"]는 이미 성공처리 되었습니다.");
     }
 
     private void validateAlreadyExistPaymentByOrderNo(String orderNo) {
         Optional<Payment> optPayment = paymentRepository.findByOrderNo(orderNo);
-        if(optPayment.isEmpty()) throw new ValidationException(ResponseType.ALREADY_SUCCESS
+        if(optPayment.isPresent()) throw new ValidationException(ResponseType.ALREADY_SUCCESS
                                                   ,"[orderNo : "+orderNo+"]는 이미 성공처리 되었습니다.");
     }
 
